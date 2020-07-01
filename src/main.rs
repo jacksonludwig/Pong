@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 extern crate glutin_window;
 extern crate graphics;
 extern crate opengl_graphics;
@@ -26,6 +24,7 @@ fn main() {
     let mut game = app::Game {
         graphics: GlGraphics::new(opengl),
         paddle: app::Paddle::new(),
+        ball: app::Ball::new(),
     };
 
     let mut events = Events::new(EventSettings::new());
