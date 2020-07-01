@@ -51,6 +51,10 @@ impl Game {
     }
 }
 
+pub struct Ball {
+    // TODO
+}
+
 pub struct Paddle {
     pub x_pos: i32,
     pub y_pos: i32,
