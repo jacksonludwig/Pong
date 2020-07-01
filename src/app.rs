@@ -4,38 +4,66 @@ use piston::input::{
 };
 use std::process;
 
-use super::shapes::Square;
-
 const BACKGROUND: [f32; 4] = [0.0, 0.5, 0.5, 1.0];
 const FOREGROUND: [f32; 4] = [0.0, 0.0, 1.0, 1.0];
 
-pub struct App {
+pub struct Game {
     pub graphics: GlGraphics,
-    pub square: Square,
+    pub paddle: Paddle,
 }
 
-impl App {
-    pub fn render(&mut self, args: &RenderArgs) {
-        use graphics::*;
+impl Game {
+    pub fn render(&mut self, rend_args: &RenderArgs) {
+        self.graphics.draw(rend_args.viewport(), |_context, graph| {
+            graphics::clear(BACKGROUND, graph);
+        });
+        self.paddle.render(&mut self.graphics, rend_args);
+    }
 
-        let square = rectangle::square(0.0, 0.0, 50.0);
-        let rotation = self.square.rotation;
-        let (x, y) = (args.window_size[0] / 2.0, args.window_size[1] / 2.0);
+    pub fn update(&mut self) {
+        self.paddle.update();
+    }
+}
 
-        self.graphics.draw(args.viewport(), |context, graphics| {
-            clear(BACKGROUND, graphics);
+pub enum Direction {
+    Left,
+    Right,
+}
 
-            let transform = context
-                .transform
-                .trans(x, y)
-                .rot_rad(rotation)
-                .trans(-25.0, -25.0);
+pub struct Paddle {
+    pub x_pos: i32,
+    pub y_pos: i32,
+    pub x_velocity: i32,
+    pub y_velocity: i32,
+    pub direction: Direction,
+}
 
-            rectangle(FOREGROUND, square, transform, graphics);
+impl Paddle {
+    pub fn new() -> Paddle {
+        Paddle {
+            x_pos: 0,
+            y_pos: 0,
+            x_velocity: 10,
+            y_velocity: 10,
+            direction: Direction::Right,
+        }
+    }
+
+    fn render(&self, graph: &mut GlGraphics, rend_args: &RenderArgs) {
+        use graphics::{rectangle, Transformed};
+
+        let rect = graphics::rectangle::square(self.x_pos as f64, self.y_pos as f64, 50.0);
+
+        graph.draw(rend_args.viewport(), |context, graph| {
+            let transform = context.transform;
+            rectangle(
+                FOREGROUND,
+                rect,
+                transform.trans(-40.0, self.x_pos as f64),
+                graph,
+            );
         });
     }
 
-    pub fn update(&mut self, args: &UpdateArgs) {
-        self.square.rotation += 2.0 * args.dt;
-    }
+    fn update(&mut self) {}
 }
