@@ -1,8 +1,8 @@
 use opengl_graphics::GlGraphics;
 use piston::input::{Button, Key, RenderArgs, UpdateArgs};
 
-const BACKGROUND: [f32; 4] = [0.0, 0.5, 0.5, 1.0];
-const FOREGROUND: [f32; 4] = [0.0, 0.0, 1.0, 1.0];
+const BACKGROUND: [f32; 4] = [0.18, 0.23, 0.28, 1.0];
+const FOREGROUND: [f32; 4] = [0.46, 0.31, 0.32, 1.0];
 const PADDLE_SPEED: i32 = 10;
 
 pub struct Game {
